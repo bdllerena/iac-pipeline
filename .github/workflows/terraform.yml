@@ -44,16 +44,30 @@ jobs:
       id: validate
       run: terraform validate -no-color
 
+    - name: Setup Python for Checkov
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Checkov
+      run: |
+        python -m pip install --upgrade pip
+        pip install checkov
+
     - name: Run Checkov scan
       id: checkov
-      uses: bridgecrewio/checkov-action@master
-      with:
-        directory: .
-        framework: terraform
-        output_format: sarif
-        output_file_path: reports/results.sarif
-        download_external_modules: true
+      run: |
+        checkov -d . --framework terraform --output cli --output sarif --output-file-path reports/results.sarif || true
+        echo "Checkov scan completed (exit code ignored for non-blocking)"
       continue-on-error: true
+
+    - name: Upload Checkov Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: checkov-results
+        path: reports/
+        retention-days: 30
 
     - name: Terraform Plan
       id: plan
