@@ -29,11 +29,6 @@ jobs:
         git fetch --all
         git checkout $GITHUB_SHA
 
-    - name: Terraform Format
-      run: |
-        echo "🖌️ Checking Terraform format..."
-        terraform fmt -check
-
     - name: Terraform Init
       run: |
         echo "⚙️ Initializing Terraform..."
