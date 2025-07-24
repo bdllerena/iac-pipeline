@@ -99,6 +99,27 @@ resource "aws_iam_role_policy_attachment" "api_gateway_cloudwatch" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
 }
 
+# IAM policy for ECS task to access Secrets Manager
+resource "aws_iam_role_policy" "ecs_task_secrets" {
+  name = "${var.cluster_name}-${var.service_name}-ecs-task-secrets"
+  role = aws_iam_role.ecs_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = [
+          "arn:aws:secretsmanager:us-east-1:011882899112:secret:secret-config-*"
+        ]
+      }
+    ]
+  })
+}
+
 # API Gateway Account (for CloudWatch logging)
 resource "aws_api_gateway_account" "main" {
   cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch.arn

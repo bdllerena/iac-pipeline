@@ -21,15 +21,15 @@ private_subnet_ids = [
 ##################################
 cluster_name = "my-app-cluster"
 service_name = "my-rest-api"
-docker_image = "docker.io/kennethreitz/httpbin:latest"
+docker_image = "011882899112.dkr.ecr.us-east-1.amazonaws.com/bi-app:latest"
 # Container Configuration
 container_name = "rest-api-container"
-container_port = 80
+container_port = 8080
 
 # Task Configuration
-task_cpu           = 256
-task_memory        = 512
-memory_reservation = 410 # 80% of task_memory
+task_cpu           = 512   # Up from 256
+task_memory        = 1024  # Up from 512
+memory_reservation = 820   # 80% of task_memory
 
 # CPU Architecture (X86_64 or ARM64)
 cpu_architecture        = "X86_64"
@@ -45,33 +45,45 @@ platform_version         = "LATEST"
 # Environment Variables
 environment_variables = [
   {
-    name  = "ENV"
-    value = "production"
+    name  = "SERVER_PORT"
+    value = "8080"
   },
   {
-    name  = "PORT"
-    value = "80"
+    name  = "LOG_FILE_PATH"
+    value = "/logs/api-creditcard-scoring.log"
   },
   {
-    name  = "LOG_LEVEL"
-    value = "info"
+    name  = "ALIAS_TRUSTSTORE_NAME"
+    value = "trust-store-bi.jks"
+  },
+  {
+    name  = "ALIAS_TRUSTSTORE_TYPE"
+    value = "JKS"
   }
 ]
 
 # Container Secrets (uncomment and configure if needed)
-# container_secrets = [
-#   {
-#     name      = "DATABASE_PASSWORD"
-#     valueFrom = "arn:aws:secretsmanager:us-west-2:123456789012:secret:db-password-abc123"
-#   },
-#   {
-#     name      = "API_KEY"
-#     valueFrom = "/app/api-key"
-#   }
-# ]
+container_secrets = [
+  {
+    name      = "URI_SRV_EQUIFAX"
+    valueFrom = "arn:aws:secretsmanager:us-east-1:011882899112:secret:secret-config-5AiTuI:URI_SRV_EQUIFAX::"
+  },
+  {
+    name      = "USER_SRV_EQUIFAX"
+    valueFrom = "arn:aws:secretsmanager:us-east-1:011882899112:secret:secret-config-5AiTuI:USER_SRV_EQUIFAX::"
+  },
+  {
+    name      = "PASS_SRV_EQUIFAX"
+    valueFrom = "arn:aws:secretsmanager:us-east-1:011882899112:secret:secret-config-5AiTuI:PASS_SRV_EQUIFAX::"
+  },
+  {
+    name      = "ALIAS_TRUSTSTORE_PASS"
+    valueFrom = "arn:aws:secretsmanager:us-east-1:011882899112:secret:secret-config-5AiTuI:ALIAS_TRUSTSTORE_PASS::"
+  }
+]
 
 # Health Check Configuration
-health_check_command              = "curl -f http://localhost:8080/status/200 || exit 1"
+health_check_command              = "curl -f http://localhost:8080/q/health || exit 1"
 health_check_interval             = 30
 health_check_timeout              = 5
 health_check_retries              = 3
