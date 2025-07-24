@@ -6,49 +6,7 @@
 # Note: ECS security group already allows traffic from VPC CIDR block
 # No additional rule needed since NLB traffic comes from within the VPC
 
-# S3 bucket for NLB access logs
-resource "aws_s3_bucket" "nlb_logs" {
-  count  = var.nlb_access_logs_enabled ? 1 : 0
-  bucket = var.nlb_access_logs_bucket != null ? var.nlb_access_logs_bucket : "${var.cluster_name}-${var.service_name}-nlb-logs-${random_id.bucket_suffix[0].hex}"
-
-  tags = merge(var.tags, {
-    Name = "${var.cluster_name}-${var.service_name}-nlb-logs"
-  })
-}
-
-resource "random_id" "bucket_suffix" {
-  count       = var.nlb_access_logs_enabled ? 1 : 0
-  byte_length = 4
-}
-
-resource "aws_s3_bucket_versioning" "nlb_logs" {
-  count  = var.nlb_access_logs_enabled ? 1 : 0
-  bucket = aws_s3_bucket.nlb_logs[0].id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "nlb_logs" {
-  count  = var.nlb_access_logs_enabled ? 1 : 0
-  bucket = aws_s3_bucket.nlb_logs[0].id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "nlb_logs" {
-  count  = var.nlb_access_logs_enabled ? 1 : 0
-  bucket = aws_s3_bucket.nlb_logs[0].id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
+# NLB access logs disabled for simplified deployment
 
 # Internal Network Load Balancer (Required for VPC Link)
 resource "aws_lb" "internal" {
@@ -60,13 +18,7 @@ resource "aws_lb" "internal" {
   enable_deletion_protection       = var.nlb_enable_deletion_protection
   enable_cross_zone_load_balancing = var.nlb_enable_cross_zone_load_balancing
 
-  dynamic "access_logs" {
-    for_each = var.nlb_access_logs_enabled ? [1] : []
-    content {
-      bucket  = aws_s3_bucket.nlb_logs[0].id
-      enabled = true
-    }
-  }
+  # Access logs disabled for simplified deployment
 
   tags = merge(var.tags, {
     Name = "${var.cluster_name}-${var.service_name}-internal-nlb"

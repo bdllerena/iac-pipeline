@@ -102,9 +102,9 @@ ignore_changes_desired_count = true
 ## NLB - Variables              ##
 ##################################
 # NLB Configuration (required for VPC Link)
-nlb_enable_deletion_protection       = true
+nlb_enable_deletion_protection       = false
 nlb_enable_cross_zone_load_balancing = true
-nlb_access_logs_enabled              = true
+nlb_access_logs_enabled              = false
 # nlb_access_logs_bucket = "my-custom-nlb-logs-bucket" # Optional: specify custom bucket name
 
 # Optional SSL Certificate (uncomment if you have one)
