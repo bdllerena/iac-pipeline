@@ -44,6 +44,15 @@ resource "aws_iam_role_policy" "ecs_execution_custom" {
           aws_cloudwatch_log_group.ecs.arn,
           "${aws_cloudwatch_log_group.ecs.arn}:*"
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = [
+          "arn:aws:secretsmanager:us-east-1:011882899112:secret:secret-config-*"
+        ]
       }
     ]
   })
