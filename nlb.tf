@@ -38,9 +38,11 @@ resource "aws_lb_target_group" "ecs" {
     healthy_threshold   = var.target_group_health_check_healthy_threshold
     interval            = var.target_group_health_check_interval
     port                = var.container_port
-    protocol            = "TCP"
+    protocol            = "HTTP"
+    path                = "/q/health"
     timeout             = var.target_group_health_check_timeout
     unhealthy_threshold = var.target_group_health_check_unhealthy_threshold
+    matcher             = "200"
   }
 
   # Target group attributes for NLB
