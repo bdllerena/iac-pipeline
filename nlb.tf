@@ -72,4 +72,6 @@ resource "aws_lb_listener" "tcp" {
   tags = merge(var.tags, {
     Name = "${var.cluster_name}-${var.service_name}-tcp-listener"
   })
+
+  depends_on = [aws_lb_target_group.ecs]
 }

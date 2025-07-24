@@ -154,7 +154,8 @@ resource "aws_ecs_service" "main" {
   }
 
   depends_on = [
-    aws_iam_role_policy_attachment.ecs_execution_policy
+    aws_iam_role_policy_attachment.ecs_execution_policy,
+    aws_lb_listener.tcp
   ]
 
   tags = merge(var.tags, {
