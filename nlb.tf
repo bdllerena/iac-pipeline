@@ -27,7 +27,7 @@ resource "aws_lb" "internal" {
 
 # NLB Target Group
 resource "aws_lb_target_group" "ecs" {
-  name        = "${var.cluster_name}-${var.service_name}-tg"
+  name        = "${var.service_name}-${var.container_port}-tg"
   port        = var.container_port
   protocol    = "TCP"
   vpc_id      = var.vpc_id
