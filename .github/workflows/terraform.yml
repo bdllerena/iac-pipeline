@@ -23,11 +23,7 @@ jobs:
 
     steps:
     - name: Checkout
-      run: |
-        echo "🔄 Checking out code..."
-        git config --global --add safe.directory $GITHUB_WORKSPACE || true
-        git fetch --all
-        git checkout $GITHUB_SHA
+      uses: actions/checkout@v4
 
     - name: Terraform Init
       run: |
