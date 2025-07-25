@@ -83,7 +83,7 @@ container_secrets = [
 ]
 
 # Health Check Configuration
-health_check_command              = "java -cp /deployments/quarkus-run.jar -Dquarkus.http.host=localhost -Dquarkus.http.port=8080 io.quarkus.runtime.health.HealthCheckCommand || exit 1"
+health_check_command              = "nc -z localhost 8080 || exit 1"
 health_check_interval             = 30
 health_check_timeout              = 5
 health_check_retries              = 3
