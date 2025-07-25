@@ -27,9 +27,9 @@ container_name = "rest-api-container"
 container_port = 8080
 
 # Task Configuration
-task_cpu           = 512   # Up from 256
-task_memory        = 1024  # Up from 512
-memory_reservation = 820   # 80% of task_memory
+task_cpu           = 512  # Up from 256
+task_memory        = 1024 # Up from 512
+memory_reservation = 820  # 80% of task_memory
 
 # CPU Architecture (X86_64 or ARM64)
 cpu_architecture        = "X86_64"
@@ -83,7 +83,7 @@ container_secrets = [
 ]
 
 # Health Check Configuration
-health_check_command              = "curl -f http://localhost:8080/q/health || exit 1"
+health_check_command              = "java -cp /deployments/quarkus-run.jar -Dquarkus.http.host=localhost -Dquarkus.http.port=8080 io.quarkus.runtime.health.HealthCheckCommand || exit 1"
 health_check_interval             = 30
 health_check_timeout              = 5
 health_check_retries              = 3
@@ -105,7 +105,7 @@ log_retention_days = 14
 
 # Feature Flags
 enable_container_insights    = true
-enable_execute_command       = false
+enable_execute_command       = true
 enable_ecs_managed_tags      = true
 propagate_tags               = "TASK_DEFINITION"
 wait_for_steady_state        = false
