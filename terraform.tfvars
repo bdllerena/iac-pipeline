@@ -36,7 +36,7 @@ cpu_architecture        = "X86_64"
 operating_system_family = "LINUX"
 
 # Service Configuration
-desired_count            = 2
+desired_count            = 1
 capacity_provider        = "FARGATE"
 capacity_provider_weight = 100
 capacity_provider_base   = 1
