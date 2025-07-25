@@ -109,7 +109,7 @@ enable_execute_command       = true
 enable_ecs_managed_tags      = true
 propagate_tags               = "TASK_DEFINITION"
 wait_for_steady_state        = false
-ignore_changes_desired_count = true
+ignore_changes_desired_count = false
 ##################################
 ## NLB - Variables              ##
 ##################################
